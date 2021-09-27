@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg1038"
+   version="1.1"
+   viewBox="0 0 10.583333 31.750001"
+   height="120"
+   width="40">
+  <defs
+     id="defs1032" />
+  <metadata
+     id="metadata1035">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-27.816173,-49.220219)"
+     id="layer1">
+    <path
+       id="path1594"
+       d="m 31.132298,51.867736 h 3.934251 l 2.092173,2.092174 v 3.7082 h -1.668929 v -3.309003 l -0.803202,-0.803203 h -2.996379 l -0.993182,0.993182 v 6.062496 l 0.789977,0.789976 h 3.339062 l 0.645087,-0.645087 -3.011409,-3.011409 h 1.490975 l 3.150286,3.150286 -2.14508,2.14508 H 31.22849 l -2.171533,-2.171533 v -6.644457 z"
+       style="fill:#416a85;fill-opacity:1;fill-rule:evenodd;stroke:#416a85;stroke-width:0.00336672px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path1594-1"
+       d="M 35.083381,78.322702 H 31.14913 l -2.092173,-2.092174 v -3.7082 h 1.66893 v 3.309003 l 0.803202,0.803202 h 2.996378 l 0.993182,-0.993181 V 69.578856 L 34.728673,68.78888 h -3.339062 l -0.645087,0.645087 3.011408,3.011408 h -1.490975 l -3.150286,-3.150285 2.145081,-2.145081 h 3.727437 l 2.171533,2.171534 V 75.966 Z"
+       style="fill:#416a85;fill-opacity:1;fill-rule:evenodd;stroke:#416a85;stroke-width:0.00336672px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path1632"
+       d="m 32.464246,62.98641 h 1.287188 v 4.217619 h -1.287188 z"
+       style="fill:#416a85;fill-opacity:1;fill-rule:evenodd;stroke:#416a85;stroke-width:0.21130481px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+</svg>
