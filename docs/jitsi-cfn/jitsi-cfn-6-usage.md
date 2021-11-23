@@ -1,9 +1,11 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 id: usage
 ---
 
 # Usage Notes
+
+## Handy shortcuts
 
 On the Control server:
 * `jitsictl` - Tool for easily administering shards in your cluster
@@ -19,7 +21,7 @@ On the Meet and JVB servers:
 Critical logs on each instance are configured with logrotate to compress and archive themselves to the S3 bucket daily, or when the instance is terminated, whichever comes first.
 
 ## Jitsictl Usage
-The control server has a convenience script called `jitsictl` which lets you easily administed your cluster.
+The control server has a convenience script called `jitsictl` which lets you easily administer your cluster.
 
 To enable a shard:
 `jitsictl <region> enable <shard>`
