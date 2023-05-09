@@ -116,3 +116,7 @@ A: This means you're using an AWS account that already has too many VPCs in the 
 ### Q: When launching the stack, I get the error: "The maximum number of addresses has been reached."
 
 A: That means you've exceeded your maximum number of Elastic IP addresses for the region (usually 5). Remove some EIP's from your account, or use a separate AWS account.
+
+### Q: Do the setup scripts use the latest version of Jitsi on each launch, or are the images pegged to a specific Jitsi version?
+
+A: The setup scripts are set to install the latest version of Jitsi on each launch. This approach was chosen to ensure compatability with quirks associated with using JWT tokens and CloudFormation dynamic secrets rules. If using a specific version of Jitsi is critical to your setup, you should use the post-install script to purge and reinstall the relevant Jitsi packages.
