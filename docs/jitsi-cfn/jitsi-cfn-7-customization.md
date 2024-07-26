@@ -79,3 +79,47 @@ sed -i "s/\"Secure and high quality meetings\"/\"Your App Tagline\"/g" /usr/shar
 # Restart nginx
 service nginx restart
 ```
+
+## Enable moderator status based on JWT
+
+Include a "moderator" boolean in your JWT fields, like `"moderator": true,`
+
+Then enable the moderation plugin:
+
+```bash
+#!/bin/bash
+
+FQDN=example.com
+
+wget -O /usr/share/jitsi-meet/prosody-plugins/mod_token_moderation.lua https://raw.githubusercontent.com/nvonahsen/jitsi-token-moderation-plugin/master/mod_token_moderation.lua
+
+sed -i "/token_verification/a\ \ \ \ \ \ \ \ \"token_moderation\";" /etc/prosody/conf.avail/$FQDN.cfg.lua
+
+service prosody restart
+```
+
+## Disable speakerstats
+```bash
+#!/bin/bash
+
+FQDN=example.com
+
+sed -i "s/speakerstats_component =/-- speakerstats_component =/g" /etc/prosody/conf.avail/$FQDN.cfg.lua
+sed -i "s/\"speakerstats\"/-- \"speakerstats\"/g" /etc/prosody/conf.avail/$FQDN.cfg.lua
+sed -i "s/Component \"speakerstats/-- Component \"speakerstats/g" /etc/prosody/conf.avail/$FQDN.cfg.lua
+sed -i "0,/muc_component/ s/muc_component =/-- muc_component =/" /etc/prosody/conf.avail/$FQDN.cfg.lua
+
+service prosody restart
+```
+
+## Disable lobby
+```bash
+#!/bin/bash
+
+FQDN=example.com
+
+sed -i "s/\"muc_lobby_rooms\"/-- \"muc_lobby_rooms\"/g" /etc/prosody/conf.avail/$FQDN.cfg.lua
+sed -i "s/lobby_muc/-- lobby_muc/g" /etc/prosody/conf.avail/$FQDN.cfg.lua
+
+service prosody restart
+```

@@ -7,7 +7,7 @@ id: overview
 
 ## Overview
 
-This CloudFormation stack deploys a production-ready, scalable, and redundant Jitsi Meet cluster spread across multiple availability zones in a single AWS region. It is built to support many thousands of simultaneous users and comes with built-in logging, monitoring, and control scripts. It can also optionally be configured to use JWT Authentication to further secure access. If necessary, the deployment can be easily customized to add/remove specific Jitsi features and add-ons.
+This CloudFormation stack deploys a production-ready, scalable, and redundant Jitsi Meet cluster spread across multiple availability zones in a single AWS region. It is built to support many thousands of simultaneous users and comes with built-in logging, monitoring, control scripts, and TURN options for NAT traversal. It can also optionally be configured to use JWT Authentication or a Prosody secure domain to control access. If necessary, the deployment can be easily customized to add/remove specific Jitsi features and add-ons.
 
 ## Is this a fit for my use case?
 
@@ -17,7 +17,6 @@ It is assumed you have a basic understanding of system administration on AWS, an
 
 If you need any of the following features or Jitsi add-ons, they are not currently part of this stack, but you can contact us at [support@quickdrawsoftware.com](mailto:support@quickdrawsoftware.com) for a customized deployment:
 * Multi-region AWS deployments on a single domain
-* TURN server support for firewall traversal
 * Octo configuration for cascading bridges
 * Jibri for recording/streaming
 * Jigasi for SIP-based phone access

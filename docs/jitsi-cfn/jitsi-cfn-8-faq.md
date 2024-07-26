@@ -7,17 +7,25 @@ id: faq
 
 ### Q: How do I SSH to the instances?
 
-A: You have to SSH to the Control instance, then from there SSH to the other instances. For security reasons, all the HAProxy, Meet, and JVB instances are inside a private subnet and don't have an external IP that's reachable via SSH. You access the Control instance at the fixed elastic IP for the instance. The username is "ubuntu", and you have to use the private key file of the SSH key pair you provided to the template at launch, AWS doesn't allow password-based access over SSH. Typically this means something like:
+A: You have to SSH to the Control instance, then from there SSH to the other instances. For security reasons, all the HAProxy, Meet, JVB, and TURN instances are inside a private subnet and don't have an external IP reachable via SSH. You access the Control instance at the fixed elastic IP for the instance. The username is "ubuntu", and you have to use the private key file of the SSH key pair you provided to the template at launch, AWS doesn't allow password-based access over SSH. Typically this means something like:
 
 `ssh -i ~/privatekey.pem ubuntu@xxx.xxx.xxx.xxx`
 
 Once you're in that instance, you can copy your private key file to e.g. `/root/.ssh/jitsi.pem`, which will enable SSH'ing from the Control instance to the other hosts on their private IP. Make sure to `chmod 600 /root/.ssh/jitsi.pem` or SSH will complain.
 
+So, for example, to SSH to the TURN instance from the Control instance, you would do:
+
+`sudo ssh -i /root/.ssh/jitsi.pem ubuntu@10.0.0.11`
+
 ### Q: How do I configure the DNS?
 
 A: Create a CNAME for your subdomain that points to the ELB DNS address provided in the CloudFormation stack outputs. Exactly how to configure the CNAME will depend on your specific domain registrar.
+
+On many registrars, the CNAME will need to have a trailing dot `.` at the end of the ELB DNS address, like `meet.example.com.` - be sure to check with your registrar what format to use.
  
-Once the DNS record is created, it will usually take a few minutes for DNS changes to propagate (anywhere from 5m to 24h depending on your registrar). Note that it also takes roughly 5-10m from the time the stack completes provisioning until the services are all  available, as various machines boot up (though DNS almost always takes longer, so in practice you won't notice).
+Once the DNS record is created, it will usually take a few minutes for DNS changes to propagate (anywhere from 5m to 24h depending on your registrar). Note that it also takes roughly 5-10m from the time the stack completes provisioning until the services are all available, as various machines boot up (though DNS almost always takes longer, so in practice you won't notice).
+
+If you enabled TURN, you'll also need to create an A record for the TURN domain that points to the TURN server's IP address, which is also provided as a stack output.
 
 ### Q: How do I run Jitsi on the root/apex domain?
 
@@ -60,9 +68,10 @@ Payload:
   },
   "aud": "jitsi",
   "iss": "my_client",
-  "sub": "jitsi.example.com",
+  "sub": "meet.example.com",
   "room": "*",
-  "exp": 1500006923
+  "exp": 1500006923,
+  "nbf": 1499996923
 }
 
 ```
@@ -70,7 +79,7 @@ Payload:
 You need to sign each JWT using the key provided in the CloudFormation template output.
 
 Then, you start a meeting by embedding the encoded/signed JWT in the URL, like:
-`https://jitsi.example.com/test?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ`
+`https://meet.example.com/test?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ`
 
 Further documentation is here:
 
@@ -79,11 +88,16 @@ https://github.com/jitsi/lib-jitsi-meet/blob/master/doc/tokens.md
 
 ### Q: How else can I secure access to my Jitsi deployment?
 
-A: If all of your users are coming from a known domain, you might be able to use the "Secure Domain" feature of Jitsi, which requires some configuration changes to both Jitsi and Prosody, which can be done via a post-install script. Alternately, if you have a wider user base you most likely would want to set up a separate LDAP authentication server, and then tie the Prosody/Jitsi auth into that. You also have other options for security - for example if all your users are coming from the same network, it might be easier to just limit access to a confined range of IP's. Or, let users handle the security themselves by setting a password on the room once they start a meeting. Here's the section of the Jitsi documentation about these options:
+A: If you have a list of authorized users and passwords, you might be able to use a Prosody "Secure Domain", which requires you to manually add authorized users/passwords to the Prosody instance on the Meet server in each shard. Enabling the Secure Domain feature is available as an option during stack launch. After enabling Secure Domain in the stack settings, you can run a command like this on each Meet server to add a user:
+
+`sudo prosodyctl register <username> meet.example.com <password>`
+
+Alternately, if you have a wider user base you most likely would want to set up a separate LDAP authentication server, and then tie the Prosody/Jitsi auth into that. You also have other options for security - for example if all your users are coming from the same network, it might be easier to just limit access to a confined range of IP's. Or, let users handle the security themselves by setting a password on the room once they start a meeting. Here's the section of the Jitsi documentation about these options:
 
 https://jitsi.github.io/handbook/docs/devops-guide/secure-domain
 
 https://jitsi.github.io/handbook/docs/devops-guide/ldap-authentication
+
 
 ### Q: How many people can I put in a single Jitsi room, or on a single bridge or shard?
 
@@ -117,6 +131,17 @@ A: This means you're using an AWS account that already has too many VPCs in the 
 
 A: That means you've exceeded your maximum number of Elastic IP addresses for the region (usually 5). Remove some EIP's from your account, or use a separate AWS account.
 
-### Q: Do the setup scripts use the latest version of Jitsi on each launch, or are the images pegged to a specific Jitsi version?
+### Q: Is the stack pegged to a specific version of Jitsi, or does it use the latest build?
 
-A: The setup scripts are set to install the latest version of Jitsi on each launch. This approach was chosen to ensure compatability with quirks associated with using JWT tokens and CloudFormation dynamic secrets rules. If using a specific version of Jitsi is critical to your setup, you should use the post-install script to purge and reinstall the relevant Jitsi packages.
+A: For more predictable builds and stability, the stack is currently pegged to the following package versions:
+* Jitsi Meet: 2.0.9584-1
+* Jitsi Meet Tokens: 1.0.8043-1
+* HAProxy: 3.0.2-1ppa1~noble
+* Prosody: 0.12.4-1build3
+* Coturn: 4.6.1-1build4
+
+If you need to use the latest builds (e.g. for testing), you can enable the UseLatest stack parameter at launch. This is not recommended for production, as it may be unstable.
+
+### Q: Why do I see additional instances start up temporarily during stack launch?
+
+A: Most likely, you are using smaller instance types than the recommended c5.xlarge. Using smaller instance types, you may see additional instances temporarily spin up during stack launch, as provisioning may cause instances to autoscale after exceeding the default CPU threshold.

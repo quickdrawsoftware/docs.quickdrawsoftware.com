@@ -17,9 +17,9 @@ https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html
 
 https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html
 
-* (Optional) Set up a Slack Webhook URL if you want monitoring notifications sent to Slack:
+* (Optional) Set up a Slack Bot Token if you want monitoring notifications sent to Slack:
 
-https://api.slack.com/messaging/webhooks
+https://api.slack.com/tutorials/tracks/getting-a-token
 
 ## Recommendations
 
