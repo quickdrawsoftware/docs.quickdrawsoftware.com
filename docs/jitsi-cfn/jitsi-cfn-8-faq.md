@@ -143,7 +143,7 @@ A: For more predictable builds and stability, the stack is currently pegged to t
 * jitsi-meet-turnserver: 1.0.8091-1
 * jitsi-meet-tokens: 1.0.8091-1
 * prosody: 0.12.4-1build3
-* haproxy: 3.0.2-1ppa1~noble
+* haproxy: 3.0.5-1ppa1~noble
 * coturn: 4.6.1-1build4
 
 If you need to use the latest builds (e.g. for testing), you can enable the UseLatest stack parameter at launch. This is not recommended for production, as it may be unstable.
